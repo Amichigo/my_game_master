@@ -14,7 +14,7 @@ public:
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 
 	CGameObject(LPCWSTR texturePath);
-	void Update(DWORD dt);
+	virtual void Update(DWORD dt);
 	void Render();
 	~CGameObject();
 };

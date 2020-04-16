@@ -1,7 +1,7 @@
 /* =============================================================
 	INTRODUCTION TO GAME PROGRAMMING SE102
-	
-	SAMPLE 01 - SKELETON CODE 
+
+	SAMPLE 01 - SKELETON CODE
 
 	This sample illustrates how to:
 
@@ -28,15 +28,15 @@
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
 
-#define MAX_FRAME_RATE 10
+#define MAX_FRAME_RATE 60
 
 using namespace std;
 
-CGame *game;
-CMario *mario;
-CGameObject *brick;
+CGame* game;
+CGameObject* brick;
+CMario* mario;
 
-//vector<LPGAMEOBJECT> objects;  
+vector<LPGAMEOBJECT> objects;  
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -56,11 +56,20 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 */
 void LoadResources()
 {
-	mario = new CMario(MARIO_TEXTURE_PATH);
-	mario->SetPosition(10.0f, 130.0f);
 
-	brick = new CGameObject(BRICK_TEXTURE_PATH);
-	brick->SetPosition(10.0f, 100.0f);
+	for (int i = 0; i < 3; i++)
+	{
+		mario = new CMario(MARIO_TEXTURE_PATH);
+		mario->SetPosition(i * 30.0f, i + 50.0f);
+		objects.push_back(mario);
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		brick = new CGameObject(BRICK_TEXTURE_PATH);
+		brick->SetPosition(i * 20.0f, 100.0f);
+		objects.push_back(brick);
+	}
 }
 
 /*
@@ -73,12 +82,14 @@ void Update(DWORD dt)
 	for (int i=0;i<n;i++)
 		objects[i]->Update(dt);
 	*/
-	mario->Update(dt);
-	brick->Update(dt);
+	for (int i = 0; i < objects.size(); i++)
+	{
+		objects[i]->Update(dt);
+	}
 }
 
 /*
-	Render a frame 
+	Render a frame
 */
 void Render()
 {
@@ -93,9 +104,10 @@ void Render()
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
-
-		mario->Render();
-		brick->Render();
+		for (int i = 0; i < objects.size(); i++)
+		{
+			objects[i]->Render();
+		}
 
 
 		spriteHandler->End();
@@ -140,7 +152,7 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 			hInstance,
 			NULL);
 
-	if (!hWnd) 
+	if (!hWnd)
 	{
 		OutputDebugString(L"[ERROR] CreateWindow failed");
 		DWORD ErrCode = GetLastError();
@@ -183,7 +195,7 @@ int Run()
 			Render();
 		}
 		else
-			Sleep(tickPerFrame - dt);	
+			Sleep(tickPerFrame - dt);
 	}
 
 	return 1;
