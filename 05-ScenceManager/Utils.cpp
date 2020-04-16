@@ -1,5 +1,5 @@
 #include <Windows.h>
-
+#include <string>
 #include "Utils.h"
 
 void DebugOut(wchar_t *fmt, ...)
