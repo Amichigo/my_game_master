@@ -46,6 +46,7 @@ LPDIRECT3DTEXTURE9 texBrick;				// texture object to store brick image
 float brick_x = 0.0f;
 float brick_vx = 0.1f;
 float brick_y = 100.0f;
+float brick_vy = 0.1f;
 
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -159,8 +160,11 @@ void Update(DWORD dt)
 {
 	//brick_x++;
 
+	brick_y = brick_y + brick_vy * dt;
 	brick_x = brick_x + brick_vx*dt; 
-	if ( (brick_x > (SCREEN_WIDTH - 32)) || brick_x < 0) brick_vx = -brick_vx;
+
+	if ((brick_x > (SCREEN_WIDTH - 32)) || brick_x < 0) brick_vx = -brick_vx;
+	if ((brick_y > (SCREEN_HEIGHT - 48)) || brick_y < 0) brick_vy = -brick_vy;
 }
 
 /*
@@ -175,7 +179,7 @@ void Render()
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
-		D3DXVECTOR3 p(brick_x,100.0f, 0);
+		D3DXVECTOR3 p(brick_x,brick_y, 0);
 
 		//D3DXVECTOR3 p(100.0f,10.0f, 0);
 		spriteHandler->Draw(texBrick, NULL, NULL, &p, D3DCOLOR_XRGB(255, 255, 255));
